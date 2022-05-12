@@ -1,0 +1,36 @@
+{
+  "name": "simplebks-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.16",
+    "pm2": "^5.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.17.10",
+    "@babel/preset-env": "^7.17.10",
+    "chai": "^4.3.6",
+    "docdash": "^1.2.0",
+    "jsdoc": "^3.6.10",
+    "jsdoc-to-markdown": "^7.1.1",
+    "mocha": "^10.0.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start-dev": "nodemon src/app.js",
+    "start": "pm2-runtime start ecosystem.config.cjs --env production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinemelu/simplebks-api.git"
+  },
+  "author": "Chinemelu Anthony Nwosu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chinemelu/simplebks-api/issues"
+  },
+  "homepage": "https://github.com/chinemelu/simplebks-api#readme"
+}
