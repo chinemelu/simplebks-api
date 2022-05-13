@@ -4,25 +4,34 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongodb": "^4.6.0",
     "nodemon": "^2.0.16",
-    "pm2": "^5.2.0"
+    "pm2": "^5.2.0",
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.17.10",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-proposal-object-rest-spread": "^7.17.3",
     "@babel/preset-env": "^7.17.10",
     "chai": "^4.3.6",
     "docdash": "^1.2.0",
     "jsdoc": "^3.6.10",
     "jsdoc-to-markdown": "^7.1.1",
-    "mocha": "^10.0.0"
+    "mocha": "^10.0.0",
+    "morgan": "^1.10.0",
+    "standard": "^17.0.0"
   },
   "scripts": {
     "test": "mocha",
     "start-dev": "nodemon src/app.js",
     "start": "pm2-runtime start ecosystem.config.cjs --env production"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chinemelu/simplebks-api.git"
