@@ -2,25 +2,12 @@ import envData from '../../configs/envData.js'
 
 import { MongoClient } from 'mongodb'
 
-async function listDatabases (client) {
-  let databasesList = []
-  databasesList = await client.db().admin().listDatabases()
+export const client = new MongoClient(envData.DATABASE_CONNECTION_STRING)
 
-  console.log('Databases:')
-  databasesList.databases.forEach(db => console.log(` - ${db.name}`))
-};
-
-async function main () {
-  const client = new MongoClient(envData.DATABASE_CONNECTION_STRING)
-
+export const startClient = async () => {
   try {
     await client.connect()
-    await listDatabases(client)
-  } catch (e) {
-    console.error(e)
-  } finally {
-    await client.close()
+  } catch (err) {
+    console.log(err)
   }
 }
-
-main().catch(console.error)
