@@ -16,3 +16,14 @@ export const isInteger = (val) => {
 export const isPositiveInteger = (val) => isInteger(val) && val > 0
 
 export const objectIsEmpty = (val) => !Object.keys(val).length
+
+export const isValidBase64 = (val) => {
+  return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
+    .test(val)
+}
+
+export const arePlainTextCredentialsTheRightPattern = (val) => {
+  // should follow username:password pattern
+  const regexForValidation = /^[0-9a-zA-Z]+:\d+$/
+  return regexForValidation.test(val)
+}

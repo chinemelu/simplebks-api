@@ -17,7 +17,7 @@ import {
 
 class AuthController {
   /**
-   * @description add a fee configuration
+   * @description login into the application
    * @param {object} req - Request object
    * @param {object} res - Response object
    * @param {function} next - Call back function to pass on data to the next middleware

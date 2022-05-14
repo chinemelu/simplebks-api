@@ -5,3 +5,7 @@ export const trimStringValues = (val) => {
     return val.trim()
   }
 }
+
+export const convertToNumber = (val) => {
+  return Number(val)
+}

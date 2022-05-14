@@ -1,6 +1,6 @@
 import APIException from '../utilities/APIException.js'
 import { startClient, client } from '../database/config/dbConnection.js'
-import { RESPONSE_MESSAGE } from '../utilities/constants.js'
+import { CONFIG, RESPONSE_MESSAGE } from '../utilities/constants.js'
 
 /**
  * @description class will implement seller database query
@@ -16,7 +16,8 @@ class SellerRepository {
   static async findOne (filterData) {
     try {
       await startClient()
-      const response = await client.db('simplebks-api').collection('orderSellers').findOne(filterData)
+      const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_SELLERS)
+        .findOne(filterData)
       await client.close()
       return response
     } catch (err) {
@@ -31,10 +32,11 @@ class SellerRepository {
 
   static async authenticateSeller ({ username, password }) {
     try {
-      await startClient()
-      const response = await client.db('simplebks-api').collection('orderSellers')
-        .findOne({ seller_id: username, seller_zip_code_prefix: password })
-      await client.close()
+      const responseCb = () => {
+        return client.db(CONFIG.DB).collection(CONFIG.ORDER_SELLERS)
+          .findOne({ seller_id: username, seller_zip_code_prefix: password })
+      }
+      const response = await startClient(responseCb)
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
@@ -50,7 +52,8 @@ class SellerRepository {
 
   static async deleteOne (filterData, options = null) {
     try {
-      const response = await client.db('simplebks-api').collection('orderSellers').deleteOne(filterData, options)
+      const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_SELLERS)
+        .deleteOne(filterData, options)
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)

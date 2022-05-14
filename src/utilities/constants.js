@@ -1,7 +1,26 @@
 export const RESPONSE_MESSAGE = {
   SERVER_ERROR: 'Server error. Please try again',
   INVALID_CREDENTIALS: 'Invalid credentials',
-  MISSING_AUTHORIZATION_HEADER: 'Missing authorization header'
+  MISSING_AUTHORIZATION_HEADER: 'Missing authorization header',
+  INVALID_QUERY_LIMIT: 'Invalid query limit. limit is between 20 and 100',
+  INVALID_ORDER_QUERY_STRING: 'Invalid order query string. Order should be either asc or desc',
+  INVALID_SORT_QUERY_STRING: 'Invalid sort query string. You can only sort by shipping_limit_date or price'
+}
+
+export const CONFIG = {
+  DB: 'simplebks-api',
+  ORDER_SELLERS: 'orderSellers',
+  ORDER_ITEMS: 'orderItems'
+}
+
+export const ORDER = {
+  ASC: 'asc',
+  DESC: 'desc'
+}
+
+export const SORT = {
+  SHIPPING_LIMIT_DATE: 'shipping_limit_date',
+  PRICE: 'price'
 }
 
 export const STATUS_CODE = {

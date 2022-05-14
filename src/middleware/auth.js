@@ -1,6 +1,7 @@
 import SellerRepository from '../repository/SellerRepository.js'
 import ServerResponses from '../utilities/ServerResponses.js'
 import { RESPONSE_MESSAGE, STATUS_CODE } from '../utilities/constants.js'
+import { isValidBase64, arePlainTextCredentialsTheRightPattern } from '../helpers/validationHelper.js'
 
 const authMiddleware = async (req, res, next) => {
   // if authorization header is missing
@@ -14,21 +15,42 @@ const authMiddleware = async (req, res, next) => {
 
   try {
     // verify Base64 encoded credentials
-    const encodedCredentials = req.headers.authorization.split(' ')[0]
+    const encodedCredentials = req.headers.authorization.split(' ')[1]
+
+    // check if encoded credentials are valid base64
+    if (!isValidBase64) {
+      return ServerResponses.response(
+        res,
+        { message: RESPONSE_MESSAGE.INVALID_CREDENTIALS },
+        STATUS_CODE.AUTH_ERROR
+      )
+    }
     const credentialsInPlainText = Buffer.from(encodedCredentials, 'base64').toString('ascii')
-    const [username, password] = credentialsInPlainText.split(':')
-    const seller = SellerRepository.authenticateSeller({ username, password })
+
+    // check the validity of credentials in plain text; they should match username:password pattern
+
+    if (!arePlainTextCredentialsTheRightPattern(credentialsInPlainText)) {
+      return ServerResponses.response(
+        res,
+        { message: RESPONSE_MESSAGE.INVALID_CREDENTIALS },
+        STATUS_CODE.AUTH_ERROR
+      )
+    }
+    let [username, password] = credentialsInPlainText.split(':')
+    password = Number(password)
+    const seller = await SellerRepository.authenticateSeller({ username, password })
 
     if (seller) {
       req.seller = seller
       return next()
     }
-    return ServerResponses.response(
+    ServerResponses.response(
       res,
       { message: RESPONSE_MESSAGE.INVALID_CREDENTIALS },
       STATUS_CODE.AUTH_ERROR
     )
   } catch (err) {
+    console.log('err', err)
     return ServerResponses.response(
       res,
       { message: RESPONSE_MESSAGE.SERVER_ERROR },

@@ -6,6 +6,8 @@ import envData from './configs/envData.js'
 
 import v1Routes from './routes/index.js'
 
+import { notFoundHander, generalErrorHandler } from './utilities/ErrorHandler.js'
+
 const app = express()
 
 const corsOption = {
@@ -25,5 +27,8 @@ app.use(express.urlencoded({
 }))
 
 app.use(v1Routes)
+
+app.use(notFoundHander)
+app.use(generalErrorHandler)
 
 app.listen(envData.PORT, () => console.log(`App listening on port ${envData.PORT}`))
