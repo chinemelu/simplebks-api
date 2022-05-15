@@ -1,6 +1,6 @@
 import logger from './logger.js'
 import APIException from './APIException.js'
-import { ERROR, RESPONSE_MESSAGE } from './Constants.js'
+import { ERROR, RESPONSE_MESSAGE } from './constants.js'
 import ServerResponses from './ServerResponses.js'
 
 /**

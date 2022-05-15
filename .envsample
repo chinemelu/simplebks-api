@@ -1,2 +1,2 @@
-DATABASE_CONNECTION_STRING=mongodb url string
-port=server port
+MONGODB_URI=mongodb url string
+PORT=server port
