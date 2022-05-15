@@ -4,7 +4,10 @@ export const RESPONSE_MESSAGE = {
   MISSING_AUTHORIZATION_HEADER: 'Missing authorization header',
   INVALID_QUERY_LIMIT: 'Invalid query limit. limit is between 20 and 100',
   INVALID_ORDER_QUERY_STRING: 'Invalid order query string. Order should be either asc or desc',
-  INVALID_SORT_QUERY_STRING: 'Invalid sort query string. You can only sort by shipping_limit_date or price'
+  INVALID_SORT_QUERY_STRING: 'Invalid sort query string. You can only sort by shipping_limit_date or price',
+  INVALID_ORDER_ITEM_ID: 'Invalid order Id. Id must be an integer',
+  ORDER_ITEM_NOT_FOUND: 'This order does not exist',
+  ORDER_ITEM_DELETED: 'Item deleted successfully'
 }
 
 export const CONFIG = {
@@ -16,6 +19,11 @@ export const CONFIG = {
 export const ORDER = {
   ASC: 'asc',
   DESC: 'desc'
+}
+
+export const ERROR = {
+  NOT_FOUND: 'NotFoundError',
+  VALIDATION_ERROR: 'ValidationError'
 }
 
 export const SORT = {

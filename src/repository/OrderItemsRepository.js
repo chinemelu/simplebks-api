@@ -70,6 +70,43 @@ class OrderItemsRepository {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
     }
   }
+
+  /**
+   * @description look for item in database
+   * @param {object} filterData
+   * @returns db data
+   */
+
+  static async findOrder (filterData) {
+    try {
+      const responseCb = () => {
+        return client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
+          .find(filterData).toArray()
+      }
+      const response = await startClient(responseCb)
+      return response
+    } catch (err) {
+      throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
+    }
+  }
+
+  /**
+   * @description delete order item in database
+   * @param {object} filterData
+   * @returns db data
+   */
+  static async deleteOrder (filterData) {
+    try {
+      const responseCb = () => {
+        return client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
+          .deleteMany(filterData)
+      }
+      const response = await startClient(responseCb)
+      return response
+    } catch (err) {
+      throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
+    }
+  }
 }
 
 export default OrderItemsRepository

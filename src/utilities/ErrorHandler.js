@@ -1,10 +1,10 @@
 import logger from './logger.js'
 import APIException from './APIException.js'
-import { RESPONSE_MESSAGE } from './Constants.js'
+import { ERROR, RESPONSE_MESSAGE } from './Constants.js'
 import ServerResponses from './ServerResponses.js'
 
 /**
-     * @description the app ues a general global exception handler
+     * @description global exception handler
      * @param {object} err - err
      * @param {object} req - request body
      * @param {object} res - response body
@@ -17,19 +17,18 @@ export const generalErrorHandler = (err, req, res, next) => {
   } = err
   let { message, statusCode } = err
   switch (name) {
-    case 'ValidationError':
-    // statusCode = 400;
+    case ERROR.VALIDATION_ERROR:
+      statusCode = 400
       break
 
-    case ('SyntaxError'):
-    // handle invalid json
-      message = RESPONSE_MESSAGE.INVALID_JSON
+    case ERROR.NOT_FOUND:
+      statusCode = 404
       break
 
     default:
     // server errors
       statusCode = 500
-      message = RESPONSE_MESSAGE.SOMETHING_WENT_WRONT
+      message = RESPONSE_MESSAGE.SERVER_ERROR
   }
   logger.error(err)
   return ServerResponses.response(res, { Error: message }, statusCode)

@@ -8,6 +8,8 @@ import {
   ORDER,
   SORT
 } from '../utilities/constants.js'
+import { isPositiveInteger } from '../helpers/validationHelper.js'
+import APIException from '../utilities/APIException.js'
 
 /**
  * @description describes Seller controller
@@ -26,7 +28,6 @@ class SellerController {
   static async fetchSellerOrderItems (req, res, next) {
     try {
       let { offset, limit, sort, order } = req.query
-      // convert string to number
       if (!limit) {
         limit = 20
       }
@@ -89,6 +90,59 @@ class SellerController {
         { message: RESPONSE_MESSAGE.SERVER_ERROR },
         STATUS_CODE.SERVER_ERROR
       )
+    }
+  }
+
+  /**
+   * @description describes the method for deleting a seller order item
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @param {function} next - Call back function to pass on data to the next middleware
+   * @returns {object} response object
+   */
+
+  static async deleteSellerOrderItem (req, res, next) {
+    let orderItemId = req.params.id
+    const sellerId = req.seller.seller_id
+    console.log('orderItems', orderItemId, sellerId)
+    if (!orderItemId) {
+      throw new APIException(RESPONSE_MESSAGE.MISSING_ORDER_ITEM_ID)
+    }
+    if (orderItemId && !isPositiveInteger(parseInt(orderItemId))) {
+      ServerResponses.response(
+        res,
+        { message: RESPONSE_MESSAGE.INVALID_ORDER_ITEM_ID },
+        STATUS_CODE.USER_ERROR
+      )
+    }
+
+    orderItemId = convertToNumber(req.params.id)
+
+    try {
+      const order = await OrderItemsRepository.findOrder({
+        order_item_id: orderItemId,
+        seller_id: sellerId
+      })
+      console.log('order', order)
+      // order will be an array of items
+      if (!order.length) {
+        return ServerResponses.response(
+          res,
+          { message: RESPONSE_MESSAGE.ORDER_ITEM_NOT_FOUND },
+          STATUS_CODE.NOT_FOUND
+        )
+      }
+      await OrderItemsRepository.deleteOrder({
+        order_item_id: orderItemId,
+        seller_id: sellerId
+      })
+      ServerResponses.response(
+        res,
+        { message: RESPONSE_MESSAGE.ORDER_ITEM_DELETED },
+        STATUS_CODE.OK
+      )
+    } catch (err) {
+      next(err)
     }
   }
 }

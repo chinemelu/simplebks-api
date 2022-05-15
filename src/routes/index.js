@@ -12,5 +12,6 @@ router.get('/', (req, res) => ServerResponses.response(
 
 router.post('/auth', AuthController.login)
 router.get('/order_items', authMiddleware, SellerController.fetchSellerOrderItems)
+router.delete('/order_items/:id', authMiddleware, SellerController.deleteSellerOrderItem)
 
 export default router
