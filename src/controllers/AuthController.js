@@ -24,38 +24,38 @@ class AuthController {
    * @returns {object} response object
    */
   static async login (req, res, next) {
-    const { sellerId, sellerZipCodePrefix } = req.body
-    if (isInputEmpty(sellerId)) {
+    const { username, password } = req.body
+    if (isInputEmpty(username)) {
       return ServerResponses.response(
         res,
-        { message: 'Seller id is required' },
+        { message: RESPONSE_MESSAGE.USERNAME_REQUIRED },
         STATUS_CODE.USER_ERROR
       )
     }
-    if (!isString(sellerId)) {
+    if (!isString(username)) {
       return ServerResponses.response(
         res,
-        { message: 'Invalid Seller id' },
+        { message: RESPONSE_MESSAGE.INVALID_USERNAME },
         STATUS_CODE.USER_ERROR
       )
     }
-    if (isInputEmpty(sellerZipCodePrefix)) {
+    if (isInputEmpty(password)) {
       return ServerResponses.response(
         res,
-        { message: 'Seller zip code prefix is required' },
+        { message: RESPONSE_MESSAGE.PASSWORD_REQUIRED },
         STATUS_CODE.USER_ERROR
       )
     }
-    if (!isPositiveInteger(sellerZipCodePrefix)) {
+    if (!isPositiveInteger(password)) {
       return ServerResponses.response(
         res,
-        { message: 'Invalid zip code prefix' },
+        { message: RESPONSE_MESSAGE.INVALID_PASSWORD },
         STATUS_CODE.USER_ERROR
       )
     }
     try {
       const seller = await SellerRepository.authenticateSeller({
-        username: trimStringValues(sellerId), password: sellerZipCodePrefix
+        username: trimStringValues(username), password
       })
 
       if (!seller) {
@@ -70,7 +70,7 @@ class AuthController {
         {
           userId: seller._id,
           credentials: credentialsToBase64Converter({
-            username: sellerId, password: sellerZipCodePrefix
+            username, password
           })
         },
         STATUS_CODE.OK

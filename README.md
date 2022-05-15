@@ -10,6 +10,17 @@ NodeJS API service for Simplebacks
 * Once the folder is cloned onto your computer, cd into the root of the folder and type `npm run install` in the terminal before pressing enter
 * To run the program on a development server type `npm start` and press enter 
 
+## Running the tests
+* The tests have been written using Jest and Supertest.
+* Write the following command on terminal.
+* ```npm test```
+* If the tests are successful, they will complete without failures or errors.
+  ```
+  .........
+  ----------------------------------------------------------------------
+    30 passing
+  ```
+
 ## Deployment
 The steps written below are for Heroku Deployment
 * cd into the root folder of the application

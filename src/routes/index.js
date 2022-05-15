@@ -10,8 +10,9 @@ router.get('/', (req, res) => ServerResponses.response(
   res, { message: 'welcome to Simplebks api' }
 ))
 
-router.post('/auth', AuthController.login)
+router.post('/auth/login', AuthController.login)
 router.get('/order_items', authMiddleware, SellerController.fetchSellerOrderItems)
 router.delete('/order_items/:id', authMiddleware, SellerController.deleteSellerOrderItem)
+router.patch('/account', authMiddleware, SellerController.UpdateSellerCityState)
 
 export default router

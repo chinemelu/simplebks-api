@@ -7,13 +7,19 @@ export const RESPONSE_MESSAGE = {
   INVALID_SORT_QUERY_STRING: 'Invalid sort query string. You can only sort by shipping_limit_date or price',
   INVALID_ORDER_ITEM_ID: 'Invalid order Id. Id must be an integer',
   ORDER_ITEM_NOT_FOUND: 'This order does not exist',
-  ORDER_ITEM_DELETED: 'Item deleted successfully'
+  ORDER_ITEM_DELETED: 'Item deleted successfully',
+  SUCCESSFUL_ACCOUNT_UPDATE: 'Account details updated successfully',
+  USERNAME_REQUIRED: 'Username is required',
+  PASSWORD_REQUIRED: 'Password is required',
+  INVALID_USERNAME: 'Username is invalid',
+  INVALID_PASSWORD: 'Password is invalid'
 }
 
 export const CONFIG = {
   DB: 'simplebks-api',
   ORDER_SELLERS: 'orderSellers',
-  ORDER_ITEMS: 'orderItems'
+  ORDER_ITEMS: 'orderItems',
+  ORDER_PRODUCTS: 'orderProducts'
 }
 
 export const ORDER = {

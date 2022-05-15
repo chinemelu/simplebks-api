@@ -1,5 +1,5 @@
 import ServerResponses from '../utilities/ServerResponses.js'
-// import SellerRepository from '../repository/SellerRepository.js'
+import SellerRepository from '../repository/SellerRepository.js'
 import OrderItemsRepository from '../repository/OrderItemsRepository.js'
 import { convertToNumber } from '../helpers/utility.js'
 import {
@@ -46,7 +46,7 @@ class SellerController {
       if (!order) {
         order = ORDER.ASC
       }
-
+      // if there is an order and the order is not asc or desc throw an error
       if (order && (order !== ORDER.ASC && order !== ORDER.DESC)) {
         return ServerResponses.response(
           res,
@@ -104,7 +104,6 @@ class SellerController {
   static async deleteSellerOrderItem (req, res, next) {
     let orderItemId = req.params.id
     const sellerId = req.seller.seller_id
-    console.log('orderItems', orderItemId, sellerId)
     if (!orderItemId) {
       throw new APIException(RESPONSE_MESSAGE.MISSING_ORDER_ITEM_ID)
     }
@@ -123,7 +122,6 @@ class SellerController {
         order_item_id: orderItemId,
         seller_id: sellerId
       })
-      console.log('order', order)
       // order will be an array of items
       if (!order.length) {
         return ServerResponses.response(
@@ -143,6 +141,82 @@ class SellerController {
       )
     } catch (err) {
       next(err)
+    }
+  }
+
+  /**
+   * @description describes the method for updating a seller's city or state
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @param {function} next - Call back function to pass on data to the next middleware
+   * @returns {object} response object
+   */
+  static async UpdateSellerCityState (req, res, next) {
+    const sellerCityFromAuthHeader = req.seller.seller_city
+    const sellerStateFromAuthHeader = req.seller.seller_state
+    const sellerId = req.seller._id
+
+    const sellerCityToUpdate = req.body.sellerCity
+    const sellerStateToUpdate = req.body.sellerState
+
+    let updateObject = {}
+    // !! operator checks if the sellerCity or sellerState is specified in the request body
+    const shouldSellerCityBeUpdated = !!sellerCityToUpdate && sellerCityFromAuthHeader !== sellerCityToUpdate
+    const shouldSellerStateBeUpdated = !!sellerStateToUpdate && sellerStateFromAuthHeader !== sellerStateToUpdate
+    // if city and state specified are different from that in the header
+    if (shouldSellerCityBeUpdated && shouldSellerStateBeUpdated) {
+      updateObject = {
+        seller_city: sellerCityToUpdate,
+        seller_state: sellerStateToUpdate
+      }
+    }
+
+    // if state specified is different from that in the header
+    if (shouldSellerCityBeUpdated && !shouldSellerStateBeUpdated) {
+      updateObject = {
+        seller_city: sellerCityToUpdate
+      }
+    }
+
+    // if only state specified is different from that in the header
+    if (!shouldSellerCityBeUpdated && shouldSellerStateBeUpdated) {
+      updateObject = {
+        seller_state: sellerStateToUpdate
+      }
+    }
+
+    const updateResponse = {
+      seller_city: sellerCityToUpdate,
+      seller_state: sellerStateToUpdate
+    }
+
+    if (!shouldSellerCityBeUpdated && !shouldSellerStateBeUpdated) {
+      return ServerResponses.response(
+        res,
+        {
+          message: RESPONSE_MESSAGE.SUCCESSFUL_ACCOUNT_UPDATE,
+          data: updateResponse
+        },
+        STATUS_CODE.OK
+      )
+    }
+
+    try {
+      await SellerRepository
+        .updateAccount({ _id: sellerId },
+          updateObject
+        )
+      return ServerResponses.response(
+        res,
+        { message: RESPONSE_MESSAGE.SUCCESSFUL_ACCOUNT_UPDATE, data: updateResponse },
+        STATUS_CODE.OK
+      )
+    } catch (err) {
+      ServerResponses.response(
+        res,
+        { message: RESPONSE_MESSAGE.SERVER_ERROR },
+        STATUS_CODE.SERVER_ERROR
+      )
     }
   }
 }

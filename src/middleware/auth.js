@@ -50,7 +50,6 @@ const authMiddleware = async (req, res, next) => {
       STATUS_CODE.AUTH_ERROR
     )
   } catch (err) {
-    console.log('err', err)
     return ServerResponses.response(
       res,
       { message: RESPONSE_MESSAGE.SERVER_ERROR },

@@ -16,37 +16,35 @@ class OrderItemsRepository {
 
   static async findOrderItems (filterData, { limit, offset, sort, order }) {
     try {
-      const responseCb = () => {
-        const pipeline = [
-          {
-            $lookup: {
-              from: 'orderProducts',
-              localField: 'product_id',
-              foreignField: 'product_id',
-              as: 'product_info'
-            }
-          },
-          { $unwind: '$product_info' }, // converts the product_info into an object, from an array
-          { $match: filterData },
-          { $sort: { [sort]: order === ORDER.ASC ? 1 : -1 } },
-          { $skip: offset },
-          { $limit: limit },
-          {
-            $project: {
-              _id: 0,
-              id: '$order_item_id',
-              product_id: '$product_info.product_id',
-              product_category: '$product_info.product_category_name',
-              price: '$price',
-              date: '$shipping_limit_date'
-            }
+      const pipeline = [
+        {
+          $lookup: {
+            from: 'orderProducts',
+            localField: 'product_id',
+            foreignField: 'product_id',
+            as: 'product_info'
           }
-        ]
-        return client.db(CONFIG.DB)
-          .collection(CONFIG.ORDER_ITEMS)
-          .aggregate(pipeline).toArray()
-      }
-      const response = await startClient(responseCb)
+        },
+        { $unwind: '$product_info' }, // converts the product_info into an object, from an array
+        { $match: filterData },
+        { $sort: { [sort]: order === ORDER.ASC ? 1 : -1 } },
+        { $skip: offset },
+        { $limit: limit },
+        {
+          $project: {
+            _id: 0,
+            id: '$order_item_id',
+            product_id: '$product_info.product_id',
+            product_category: '$product_info.product_category_name',
+            price: '$price',
+            date: '$shipping_limit_date'
+          }
+        }
+      ]
+      await startClient()
+      const response = await client.db(CONFIG.DB)
+        .collection(CONFIG.ORDER_ITEMS)
+        .aggregate(pipeline).toArray()
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
@@ -60,17 +58,14 @@ class OrderItemsRepository {
 
   static async findItemsCount () {
     try {
-      const responseCb = () => {
-        return client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
-          .countDocuments()
-      }
-      const response = await startClient(responseCb)
+      await startClient()
+      const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
+        .countDocuments()
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
     }
   }
-
   /**
    * @description look for item in database
    * @param {object} filterData
@@ -79,11 +74,9 @@ class OrderItemsRepository {
 
   static async findOrder (filterData) {
     try {
-      const responseCb = () => {
-        return client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
-          .find(filterData).toArray()
-      }
-      const response = await startClient(responseCb)
+      await startClient()
+      const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
+        .find(filterData).toArray()
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
@@ -97,11 +90,9 @@ class OrderItemsRepository {
    */
   static async deleteOrder (filterData) {
     try {
-      const responseCb = () => {
-        return client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
-          .deleteMany(filterData)
-      }
-      const response = await startClient(responseCb)
+      await startClient()
+      const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
+        .deleteMany(filterData)
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)

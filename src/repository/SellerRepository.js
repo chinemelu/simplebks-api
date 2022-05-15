@@ -9,22 +9,6 @@ import { CONFIG, RESPONSE_MESSAGE } from '../utilities/constants.js'
  */
 class SellerRepository {
   /**
-   * @description fetch user data
-   * @param { object } filterData - the query filter
-   * @returns mapped data
-   */
-  static async findOne (filterData) {
-    try {
-      await startClient()
-      const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_SELLERS)
-        .findOne(filterData)
-      await client.close()
-      return response
-    } catch (err) {
-      throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
-    }
-  }
-  /**
    * @description find if a seller exists in the database
    * @param { object } sellerData - the query filter
    * @returns mapped data
@@ -32,28 +16,9 @@ class SellerRepository {
 
   static async authenticateSeller ({ username, password }) {
     try {
-      const responseCb = () => {
-        return client.db(CONFIG.DB).collection(CONFIG.ORDER_SELLERS)
-          .findOne({ seller_id: username, seller_zip_code_prefix: password })
-      }
-      const response = await startClient(responseCb)
-      return response
-    } catch (err) {
-      throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
-    }
-  }
-
-  /**
-   * @description delete seller data
-   * @param { object } filterData - the query filter
-   * @param { object } options - the optional options object
-   * @returns mapped data
-   */
-
-  static async deleteOne (filterData, options = null) {
-    try {
+      await startClient()
       const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_SELLERS)
-        .deleteOne(filterData, options)
+        .findOne({ seller_id: username, seller_zip_code_prefix: password })
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)
@@ -67,9 +32,11 @@ class SellerRepository {
    * @returns mapped data
    */
 
-  static async updateOne (filterData, update) {
+  static async updateAccount (filterData, updateObject) {
     try {
-      const response = await client.orderSellers.updateOne(filterData, update)
+      await startClient()
+      const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_SELLERS)
+        .updateOne(filterData, { $set: { ...updateObject } })
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)

@@ -31,4 +31,9 @@ app.use(v1Routes)
 app.use(notFoundHander)
 app.use(generalErrorHandler)
 
-app.listen(envData.PORT, () => console.log(`App listening on port ${envData.PORT}`))
+// this is to prevent the port error that occurs during integration tests
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(envData.PORT, () => console.log(`App listening on port ${envData.PORT}`))
+}
+
+export default app
