@@ -18,7 +18,7 @@ NodeJS API service for Simplebacks
   ```
   .........
   ----------------------------------------------------------------------
-    30 passing
+  16 passing
   ```
 
 ## Deployment
@@ -36,6 +36,9 @@ The steps written below are for Heroku Deployment
 * [express](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js.
 * [dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
 * [PM2](https://pm2.keymetrics.io/) - PM2 is a production process manager for Node.js applications with a built-in load balancer.
+* [Winston](https://github.com/winstonjs/winston) - A logger for just about everything.
+* [Mongodb](https://github.com/mongodb/mongo) - NoSQL database
+* [cors](https://github.com/expressjs/cors) - CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
 
 ## Authors
 * Chinemelu Anthony Nwosu 
