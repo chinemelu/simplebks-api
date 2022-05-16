@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb'
+
 export const isInputEmpty = (val) => isUndefined(val) || isEmptyString(val)
 
 export const isEmptyString = (val) => {
@@ -26,4 +28,8 @@ export const arePlainTextCredentialsTheRightPattern = (val) => {
   // should follow username:password pattern
   const regexForValidation = /^[0-9a-zA-Z]+:\d+$/
   return regexForValidation.test(val)
+}
+
+export const isValidObjectId = (value) => {
+  return ObjectId.isValid(value)
 }

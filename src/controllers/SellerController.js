@@ -9,7 +9,7 @@ import {
   ORDER,
   SORT
 } from '../utilities/constants.js'
-import { isString } from '../helpers/validationHelper.js'
+import { isValidObjectId } from '../helpers/validationHelper.js'
 import APIException from '../utilities/APIException.js'
 
 /**
@@ -108,14 +108,13 @@ class SellerController {
     if (!orderItemId) {
       throw new APIException(RESPONSE_MESSAGE.MISSING_ORDER_ITEM_ID)
     }
-    if (orderItemId && !isString(orderItemId)) {
-      ServerResponses.response(
+    if (orderItemId && !isValidObjectId(orderItemId)) {
+      return ServerResponses.response(
         res,
         { message: RESPONSE_MESSAGE.INVALID_ORDER_ITEM_ID },
         STATUS_CODE.USER_ERROR
       )
     }
-
     orderItemId = new Mongodb.ObjectId(orderItemId)
 
     try {
