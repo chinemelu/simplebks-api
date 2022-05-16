@@ -24,7 +24,9 @@ class AuthController {
    * @returns {object} response object
    */
   static async login (req, res, next) {
-    const { username, password } = req.body
+    const { username } = req.body
+    let { password } = req.body
+    
     if (isInputEmpty(username)) {
       return ServerResponses.response(
         res,
@@ -46,6 +48,9 @@ class AuthController {
         STATUS_CODE.USER_ERROR
       )
     }
+    // convert the password to number to see if it is a valid number
+    // once it comes from the browser input, it's a string
+    password = parseInt(password)
     if (!isPositiveInteger(password)) {
       return ServerResponses.response(
         res,
