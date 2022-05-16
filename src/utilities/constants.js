@@ -5,7 +5,7 @@ export const RESPONSE_MESSAGE = {
   INVALID_QUERY_LIMIT: 'Invalid query limit. limit is between 20 and 100',
   INVALID_ORDER_QUERY_STRING: 'Invalid order query string. Order should be either asc or desc',
   INVALID_SORT_QUERY_STRING: 'Invalid sort query string. You can only sort by shipping_limit_date or price',
-  INVALID_ORDER_ITEM_ID: 'Invalid order Id. Id must be an integer',
+  INVALID_ORDER_ITEM_ID: 'Invalid order Id. Id must be a string',
   ORDER_ITEM_NOT_FOUND: 'This order does not exist',
   ORDER_ITEM_DELETED: 'Item deleted successfully',
   SUCCESSFUL_ACCOUNT_UPDATE: 'Account details updated successfully',

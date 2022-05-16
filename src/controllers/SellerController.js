@@ -1,3 +1,4 @@
+import Mongodb from 'mongodb'
 import ServerResponses from '../utilities/ServerResponses.js'
 import SellerRepository from '../repository/SellerRepository.js'
 import OrderItemsRepository from '../repository/OrderItemsRepository.js'
@@ -8,7 +9,7 @@ import {
   ORDER,
   SORT
 } from '../utilities/constants.js'
-import { isPositiveInteger } from '../helpers/validationHelper.js'
+import { isString } from '../helpers/validationHelper.js'
 import APIException from '../utilities/APIException.js'
 
 /**
@@ -107,7 +108,7 @@ class SellerController {
     if (!orderItemId) {
       throw new APIException(RESPONSE_MESSAGE.MISSING_ORDER_ITEM_ID)
     }
-    if (orderItemId && !isPositiveInteger(parseInt(orderItemId))) {
+    if (orderItemId && !isString(orderItemId)) {
       ServerResponses.response(
         res,
         { message: RESPONSE_MESSAGE.INVALID_ORDER_ITEM_ID },
@@ -115,11 +116,11 @@ class SellerController {
       )
     }
 
-    orderItemId = convertToNumber(req.params.id)
+    orderItemId = new Mongodb.ObjectId(orderItemId)
 
     try {
-      const order = await OrderItemsRepository.findOrder({
-        order_item_id: orderItemId,
+      const order = await OrderItemsRepository.findOrderItem({
+        _id: orderItemId,
         seller_id: sellerId
       })
       // order will be an array of items
@@ -130,8 +131,8 @@ class SellerController {
           STATUS_CODE.NOT_FOUND
         )
       }
-      await OrderItemsRepository.deleteOrder({
-        order_item_id: orderItemId,
+      await OrderItemsRepository.deleteOrderItem({
+        _id: orderItemId,
         seller_id: sellerId
       })
       ServerResponses.response(

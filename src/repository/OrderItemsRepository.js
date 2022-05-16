@@ -72,7 +72,7 @@ class OrderItemsRepository {
    * @returns db data
    */
 
-  static async findOrder (filterData) {
+  static async findOrderItem (filterData) {
     try {
       await startClient()
       const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
@@ -88,11 +88,11 @@ class OrderItemsRepository {
    * @param {object} filterData
    * @returns db data
    */
-  static async deleteOrder (filterData) {
+  static async deleteOrderItem (filterData) {
     try {
       await startClient()
       const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
-        .deleteMany(filterData)
+        .deleteOne(filterData)
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)

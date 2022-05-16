@@ -1,7 +1,7 @@
 import SellerRepository from '../repository/SellerRepository.js'
 import ServerResponses from '../utilities/ServerResponses.js'
 import { RESPONSE_MESSAGE, STATUS_CODE } from '../utilities/constants.js'
-import { trimStringValues } from '../helpers/utility.js'
+import { convertToNumber, trimStringValues } from '../helpers/utility.js'
 import credentialsToBase64Converter from '../helpers/base64converter.js'
 import {
   isInputEmpty,
@@ -26,7 +26,7 @@ class AuthController {
   static async login (req, res, next) {
     const { username } = req.body
     let { password } = req.body
-    
+
     if (isInputEmpty(username)) {
       return ServerResponses.response(
         res,
@@ -50,7 +50,7 @@ class AuthController {
     }
     // convert the password to number to see if it is a valid number
     // once it comes from the browser input, it's a string
-    password = parseInt(password)
+    password = convertToNumber(password)
     if (!isPositiveInteger(password)) {
       return ServerResponses.response(
         res,
