@@ -33,7 +33,7 @@ class OrderItemsRepository {
         {
           $project: {
             _id: 0,
-            id: '$order_item_id',
+            id: '$_id',
             product_id: '$product_info.product_id',
             product_category: '$product_info.product_category_name',
             price: '$price',
