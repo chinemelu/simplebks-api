@@ -53,14 +53,15 @@ class OrderItemsRepository {
 
   /**
    * @description count number of order items
+   * @param {Object} query the query associated with the items count
    * @returns db data
    */
 
-  static async findItemsCount () {
+  static async findItemsCount (query) {
     try {
       await startClient()
       const response = await client.db(CONFIG.DB).collection(CONFIG.ORDER_ITEMS)
-        .countDocuments()
+        .countDocuments(query)
       return response
     } catch (err) {
       throw new APIException(RESPONSE_MESSAGE.SERVER_ERROR)

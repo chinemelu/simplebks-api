@@ -71,11 +71,16 @@ class SellerController {
       limit = convertToNumber(limit)
       offset = convertToNumber(offset)
 
-      const total = await OrderItemsRepository.findItemsCount()
       const sellerId = req.seller.seller_id
-      const orderItems = await OrderItemsRepository.findOrderItems({
-        seller_id: sellerId
-      }, { limit, offset, sort, order })
+      const findItemsQuery = { seller_id: sellerId }
+      const [total, orderItems] = await Promise.all(
+        [
+          OrderItemsRepository.findItemsCount(findItemsQuery),
+          OrderItemsRepository.findOrderItems(findItemsQuery,
+            {
+              limit, offset, sort, order
+            })
+        ])
       ServerResponses.response(res,
         {
           data: orderItems,
